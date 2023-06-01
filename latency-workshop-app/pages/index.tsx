@@ -1,6 +1,9 @@
 import { Button, Stack, TextField, Typography } from "@mui/material";
+import { useRef } from "react";
 
 export default function Home() {
+  const blurbRef = useRef("");
+
   async function generateBlurb() {
     const response = await fetch("/api/generateBlurb", {
       method: "POST",
@@ -36,6 +39,9 @@ export default function Home() {
         multiline
         fullWidth
         minRows={4}
+        onChange={(e) => {
+          blurbRef.current = e.target.value;
+        }}
         sx={{ "& textarea": { boxShadow: "none !important" } }}
         placeholder="Key words on what you would like your blurb to be about"
       ></TextField>
