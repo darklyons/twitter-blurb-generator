@@ -14,6 +14,9 @@ export default function Home() {
 
   const generateBlurb = useCallback(async () => {
     let done = false;
+    let firstPost = false;
+    let streamedText = "";
+
     const response = await fetch("/api/generateBlurb", {
       method: "POST",
       headers: {
@@ -37,7 +40,12 @@ export default function Home() {
       const { value, done: doneReading } = await reader.read();
       done = doneReading;
       const chunkValue = decoder.decode(value);
-      setGeneratingPosts((prev) => prev + chunkValue);
+      streamedText += chunkValue;
+      if (firstPost) {
+        setGeneratingPosts(streamedText);
+      } else {
+        firstPost = streamedText.includes("1.");
+      }
     }
   }
   , [blurbRef.current]);
