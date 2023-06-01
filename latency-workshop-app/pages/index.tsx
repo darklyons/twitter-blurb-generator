@@ -7,6 +7,7 @@ export default function Home() {
   const [generatingPosts, setGeneratingPosts] = useState("");
 
   const generateBlurb = useCallback(async () => {
+    let done = false;
     const response = await fetch("/api/generateBlurb", {
       method: "POST",
       headers: {
@@ -19,9 +20,19 @@ export default function Home() {
     if (!response.ok) {
       throw new Error(response.statusText);
     }
-    const data = await response.json();
-    console.log("Response was:", JSON.stringify(data));
-    setGeneratingPosts(data.choices[0].message.content);
+    const data = response.body;
+    if (!data) {
+      return;
+    }
+    const reader = data.getReader();
+    const decoder = new TextDecoder();
+
+    while (!done) {
+      const { value, done: doneReading } = await reader.read();
+      done = doneReading;
+      const chunkValue = decoder.decode(value);
+      setGeneratingPosts((prev) => prev + chunkValue);
+    }
   }
   , [blurbRef.current]);
 
