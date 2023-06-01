@@ -72,11 +72,17 @@ export default function Home() {
 
       <Button onClick={generateBlurb}>Generate Blurb</Button>
 
-   {generatingPosts && (
-     <Card>
-       <CardContent>{generatingPosts}</CardContent>
-     </Card>
-   )}
+     {generatingPosts &&
+         generatingPosts
+           .substring(generatingPosts.indexOf("1.") + 3)
+           .split(/2\.|3\./)
+           .map((generatingPost, index) => {
+             return (
+               <Card key={index}>
+                 <CardContent>{generatingPost}</CardContent>
+               </Card>
+             );
+     })}
 
    </Stack>
   );
