@@ -6,6 +6,12 @@ export default function Home() {
 
   const [generatingPosts, setGeneratingPosts] = useState("");
 
+  const prompt = `Generate 3 tweets and clearly labeled "1." , "2." and "3.". 
+                  Follow the following criteria:
+                  1. Each tweet should be based on this context: ${blurbRef.current}
+                  2. Each tweet will have short sentences that are found in Twitter posts. 
+                  3. Each tweet will be strictly less than 280 tokens including spaces, punctuation, emojis and hashtags`;
+
   const generateBlurb = useCallback(async () => {
     let done = false;
     const response = await fetch("/api/generateBlurb", {
@@ -14,7 +20,7 @@ export default function Home() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        prompt: blurbRef.current,
+        prompt: prompt,
       }),
     });
     if (!response.ok) {
