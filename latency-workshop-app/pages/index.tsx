@@ -1,8 +1,10 @@
-import { Button, Stack, TextField, Typography } from "@mui/material";
-import { useRef, useCallback } from "react";
+import { Button, Stack, TextField, Typography, Card, CardContent } from "@mui/material";
+import { useRef, useCallback, useState } from "react";
 
 export default function Home() {
   const blurbRef = useRef("");
+
+  const [generatingPosts, setGeneratingPosts] = useState("");
 
   const generateBlurb = useCallback(async () => {
     const response = await fetch("/api/generateBlurb", {
@@ -51,6 +53,13 @@ export default function Home() {
       ></TextField>
 
       <Button onClick={generateBlurb}>Generate Blurb</Button>
+
+   {generatingPosts && (
+     <Card>
+       <CardContent>{generatingPosts}</CardContent>
+     </Card>
+   )}
+
    </Stack>
   );
 }
