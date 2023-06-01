@@ -1,22 +1,26 @@
 import { Button, Stack, TextField, Typography } from "@mui/material";
-import { useRef } from "react";
+import { useRef, useCallback } from "react";
 
 export default function Home() {
   const blurbRef = useRef("");
 
-  async function generateBlurb() {
+  const generateBlurb = useCallback(async () => {
     const response = await fetch("/api/generateBlurb", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        prompt: "This is an empty prompt",
+        prompt: blurbRef.current,
       }),
     });
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
     const data = await response.json();
     console.log("Response was:", JSON.stringify(data));
   }
+  , [blurbRef.current]);
 
   return (
     <Stack
