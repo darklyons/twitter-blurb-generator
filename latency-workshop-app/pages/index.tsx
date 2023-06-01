@@ -21,6 +21,7 @@ export default function Home() {
     }
     const data = await response.json();
     console.log("Response was:", JSON.stringify(data));
+    setGeneratingPosts(data.choices[0].message.content);
   }
   , [blurbRef.current]);
 
